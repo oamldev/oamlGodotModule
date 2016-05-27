@@ -18,8 +18,14 @@ public:
 	oamlGodotModule();
 
 	void Init(String defsFilename);
+	void InitString(String defs);
 	void InitAudioDevice();
+	void Pause();
 	void PlayTrack(String name);
+	void PlayTrackWithStringRandom(String str);
+	void PlayTrackByGroupRandom(String group);
+	void PlayTrackByGroupAndSubgroupRandom(String group, String subgroup);
+	void Resume();
 	void SetMainLoopCondition(int value);
 	void SetCondition(int id, int value);
 };
