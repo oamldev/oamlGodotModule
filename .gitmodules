@@ -1,0 +1,3 @@
+[submodule "oaml"]
+	path = oaml
+	url = https://github.com/oamldev/oaml
