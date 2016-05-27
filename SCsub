@@ -1,0 +1,6 @@
+Import('env')
+
+env.add_source_files(env.modules_sources,"*.cpp")
+env.add_source_files(env.modules_sources,"oaml/src/*.cpp")
+env.Append(CPPFLAGS=['-DOAML_VERSION_STRING="\\\"1.0\\\""','-D__HAVE_OGG'])
+env.Append(CPPPATH=['oaml/include'])
