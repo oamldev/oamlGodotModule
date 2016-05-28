@@ -17,9 +17,15 @@ protected:
 public:
 	oamlGodotModule();
 
+	void AddTension(int value);
+	float GetVolume();
 	void Init(String defsFilename);
 	void InitString(String defs);
 	void InitAudioDevice();
+	bool IsPaused();
+	bool IsPlaying();
+	bool IsTrackPlaying(String name);
+	void LoadTrack(String name);
 	void Pause();
 	void PlayTrack(String name);
 	void PlayTrackWithStringRandom(String str);
@@ -28,6 +34,9 @@ public:
 	void Resume();
 	void SetMainLoopCondition(int value);
 	void SetCondition(int id, int value);
+	void SetTension(int value);
+	void SetVolume(float vol);
+	void StopPlaying();
 };
 
 #endif
