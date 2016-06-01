@@ -68,6 +68,14 @@ void oamlGodotModule::SetCondition(int id, int value) {
 	oaml->SetCondition(id, value);
 }
 
+void oamlGodotModule::SetLayerGain(String layer, float gain) {
+	oaml->SetLayerGain(layer.ascii(), gain);
+}
+
+void oamlGodotModule::SetLayerRandomChance(String layer, int randomChance) {
+	oaml->SetLayerRandomChance(layer.ascii(), randomChance);
+}
+
 void oamlGodotModule::SetTension(int value) {
 	oaml->SetTension(value);
 }
@@ -98,6 +106,11 @@ void oamlGodotModule::_bind_methods() {
 	ObjectTypeDB::bind_method("Resume", &oamlGodotModule::Resume);
 	ObjectTypeDB::bind_method("SetMainLoopCondition", &oamlGodotModule::SetMainLoopCondition);
 	ObjectTypeDB::bind_method("SetCondition", &oamlGodotModule::SetCondition);
+	ObjectTypeDB::bind_method("SetLayerGain", &oamlGodotModule::SetLayerGain);
+	ObjectTypeDB::bind_method("SetLayerRandomChance", &oamlGodotModule::SetLayerRandomChance);
+	ObjectTypeDB::bind_method("SetTension", &oamlGodotModule::SetTension);
+	ObjectTypeDB::bind_method("SetVolume", &oamlGodotModule::SetVolume);
+	ObjectTypeDB::bind_method("StopPlaying", &oamlGodotModule::StopPlaying);
 }
 
 oamlGodotModule::oamlGodotModule() {

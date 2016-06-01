@@ -34,6 +34,8 @@ public:
 	void Resume();
 	void SetMainLoopCondition(int value);
 	void SetCondition(int id, int value);
+	void SetLayerGain(String layer, float gain);
+	void SetLayerRandomChance(String layer, int randomChance);
 	void SetTension(int value);
 	void SetVolume(float vol);
 	void StopPlaying();
