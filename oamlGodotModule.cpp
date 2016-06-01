@@ -4,6 +4,14 @@ void oamlGodotModule::AddTension(int value) {
 	oaml->AddTension(value);
 }
 
+void oamlGodotModule::EnableDynamicCompressor(bool enable, double thresholdDb, double ratio) {
+	oaml->EnableDynamicCompressor(enable, thresholdDb, ratio);
+}
+
+String oamlGodotModule::GetPlayingInfo() {
+	return String(oaml->GetPlayingInfo());
+}
+
 float oamlGodotModule::GetVolume() {
 	return oaml->GetVolume();
 }
@@ -90,6 +98,8 @@ void oamlGodotModule::StopPlaying() {
 
 void oamlGodotModule::_bind_methods() {
 	ObjectTypeDB::bind_method("AddTension", &oamlGodotModule::AddTension);
+	ObjectTypeDB::bind_method("EnableDynamicCompressor", &oamlGodotModule::EnableDynamicCompressor);
+	ObjectTypeDB::bind_method("GetPlayingInfo", &oamlGodotModule::GetPlayingInfo);
 	ObjectTypeDB::bind_method("GetVolume", &oamlGodotModule::GetVolume);
 	ObjectTypeDB::bind_method("Init", &oamlGodotModule::Init);
 	ObjectTypeDB::bind_method("InitString", &oamlGodotModule::InitString);
