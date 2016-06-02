@@ -127,7 +127,6 @@ void oamlGodotModule::_bind_methods() {
 
 static void* oamlOpen(const char *filename) {
 	FileAccess *f = FileAccess::open("res://"+String(filename), FileAccess::READ);
-	print_line("scn://"+String(filename));
 	if (f == NULL) {
 		return NULL;
 	}
