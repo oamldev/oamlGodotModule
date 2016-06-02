@@ -225,6 +225,7 @@ void oamlGodotModule::_bind_methods() {
 static void* oamlOpen(const char *filename) {
 	FileAccess *f = FileAccess::open("res://"+String(filename), FileAccess::READ);
 	if (f == NULL) {
+		print_line("oaml: Error opening resource file: res://"+String(filename));
 		return NULL;
 	}
 	return (void*)f;
