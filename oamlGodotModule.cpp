@@ -1,3 +1,5 @@
+#include "os/file_access.h"
+
 #include "oamlGodotModule.h"
 
 void oamlGodotModule::AddTension(int value) {
@@ -123,6 +125,53 @@ void oamlGodotModule::_bind_methods() {
 	ObjectTypeDB::bind_method("StopPlaying", &oamlGodotModule::StopPlaying);
 }
 
+static void* oamlOpen(const char *filename) {
+	FileAccess *f = FileAccess::open("res://"+String(filename), FileAccess::READ);
+	print_line("scn://"+String(filename));
+	if (f == NULL) {
+		return NULL;
+	}
+	return (void*)f;
+}
+
+static size_t oamlRead(void *ptr, size_t size, size_t nitems, void *fd) {
+	FileAccess *f = (FileAccess*)fd;
+	return f->get_buffer((uint8_t*)ptr, size*nitems);
+}
+
+static int oamlSeek(void *fd, long offset, int whence) {
+	FileAccess *f = (FileAccess*)fd;
+	if (whence == SEEK_SET)
+		f->seek(offset);
+	else if (whence == SEEK_END)
+		f->seek_end(offset);
+	else if (whence == SEEK_CUR)
+		f->seek(f->get_pos()+offset);
+	return 0;
+}
+
+static long oamlTell(void *fd) {
+	FileAccess *f = (FileAccess*)fd;
+	return f->get_pos();
+}
+
+static int oamlClose(void *fd) {
+	FileAccess *f = (FileAccess*)fd;
+	f->close();
+	memdelete(f);
+	return 0;
+}
+
+static oamlFileCallbacks fileCbs = {
+	&oamlOpen,
+	&oamlRead,
+	&oamlSeek,
+	&oamlTell,
+	&oamlClose
+};
+
+
 oamlGodotModule::oamlGodotModule() {
 	oaml = new oamlApi();
+	oaml->SetFileCallbacks(&fileCbs);
 }
