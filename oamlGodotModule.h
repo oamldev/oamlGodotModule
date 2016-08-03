@@ -20,6 +20,7 @@ protected:
 	};
 
 
+	Mutex *lock;
 	InternalStream *stream;
 	RID streamRid;
 	oamlApi *oaml;
