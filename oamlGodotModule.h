@@ -44,6 +44,7 @@ public:
 	bool IsPlaying();
 	bool IsTrackPlaying(String name);
 	void LoadTrack(String name);
+	float LoadTrackProgress(String name);
 	void Pause();
 	void PlayTrack(String name);
 	void PlayTrackWithStringRandom(String str);

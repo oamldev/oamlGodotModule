@@ -109,6 +109,16 @@ void oamlGodotModule::LoadTrack(String name) {
 	lock->unlock();
 }
 
+float oamlGodotModule::LoadTrackProgress(String name) {
+	if (oaml == NULL)
+		return -1.f;
+
+	lock->lock();
+	float ret = oaml->LoadTrackProgress(name.ascii());
+	lock->unlock();
+	return ret;
+}
+
 void oamlGodotModule::Pause() {
 	if (oaml == NULL)
 		return;
@@ -237,6 +247,7 @@ void oamlGodotModule::_bind_methods() {
 	ObjectTypeDB::bind_method("IsPlaying", &oamlGodotModule::IsPlaying);
 	ObjectTypeDB::bind_method("IsTrackPlaying", &oamlGodotModule::IsTrackPlaying);
 	ObjectTypeDB::bind_method("LoadTrack", &oamlGodotModule::LoadTrack);
+	ObjectTypeDB::bind_method("LoadTrackProgress", &oamlGodotModule::LoadTrackProgress);
 	ObjectTypeDB::bind_method("Pause", &oamlGodotModule::Pause);
 	ObjectTypeDB::bind_method("PlayTrack", &oamlGodotModule::PlayTrack);
 	ObjectTypeDB::bind_method("PlayTrackWithStringRandom", &oamlGodotModule::PlayTrackWithStringRandom);
