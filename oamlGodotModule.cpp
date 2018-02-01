@@ -3,38 +3,45 @@
 #include "oamlGodotModule.h"
 
 
-int oamlGodotModule::InternalStream::get_channel_count() const {
-	return 2;
-}
-
-void oamlGodotModule::InternalStream::set_mix_rate(int p_rate) {
-	owner->set_mix_rate(p_rate);
-}
-
-void oamlGodotModule::InternalStream::update() {
-}
-
-bool oamlGodotModule::InternalStream::mix(int32_t *p_buffer, int p_frames) {
-	return owner->mix(p_buffer, p_frames);
-}
-
 void oamlGodotModule::set_mix_rate(int p_rate) {
 	if (oaml == NULL)
 		return;
 
-	oaml->SetAudioFormat(p_rate, 2, 4, false);
+	oaml->SetAudioFormat(p_rate, 2, 4, true);
 }
 
-bool oamlGodotModule::mix(int32_t *p_buffer, int p_frames) {
+bool oamlGodotModule::mix(AudioFrame *p_buffer, int p_frames) {
+
 	if (oaml == NULL)
 		return true;
 
-	zeromem(p_buffer, p_frames*sizeof(int32_t)*2);
+	zeromem(p_buffer, p_frames*sizeof(AudioFrame));
 	lock->lock();
 	oaml->MixToBuffer(p_buffer, p_frames*2);
 	lock->unlock();
 
 	return true;
+}
+
+// Called from audio thread
+void oamlGodotModule::_mix_audio() {
+
+	AudioFrame *buffer = mix_buffer.ptrw();
+	int buffer_size = mix_buffer.size();
+
+	if (!mix(buffer, buffer_size))
+		return;
+
+	AudioFrame *target = AudioServer::get_singleton()->thread_get_channel_mix_buffer(0, 0);
+
+	for (int j = 0; j < buffer_size; j++) {
+		target[j] += buffer[j];
+	}
+}
+
+int oamlGodotModule::sp_get_channel_count() const {
+
+	return 2;
 }
 
 void oamlGodotModule::AddTension(int value) {
@@ -237,30 +244,30 @@ void oamlGodotModule::StopPlaying() {
 }
 
 void oamlGodotModule::_bind_methods() {
-	ObjectTypeDB::bind_method("AddTension", &oamlGodotModule::AddTension);
-	ObjectTypeDB::bind_method("EnableDynamicCompressor", &oamlGodotModule::EnableDynamicCompressor);
-	ObjectTypeDB::bind_method("GetPlayingInfo", &oamlGodotModule::GetPlayingInfo);
-	ObjectTypeDB::bind_method("GetVolume", &oamlGodotModule::GetVolume);
-	ObjectTypeDB::bind_method("Init", &oamlGodotModule::Init);
-	ObjectTypeDB::bind_method("InitString", &oamlGodotModule::InitString);
-	ObjectTypeDB::bind_method("IsPaused", &oamlGodotModule::IsPaused);
-	ObjectTypeDB::bind_method("IsPlaying", &oamlGodotModule::IsPlaying);
-	ObjectTypeDB::bind_method("IsTrackPlaying", &oamlGodotModule::IsTrackPlaying);
-	ObjectTypeDB::bind_method("LoadTrack", &oamlGodotModule::LoadTrack);
-	ObjectTypeDB::bind_method("LoadTrackProgress", &oamlGodotModule::LoadTrackProgress);
-	ObjectTypeDB::bind_method("Pause", &oamlGodotModule::Pause);
-	ObjectTypeDB::bind_method("PlayTrack", &oamlGodotModule::PlayTrack);
-	ObjectTypeDB::bind_method("PlayTrackWithStringRandom", &oamlGodotModule::PlayTrackWithStringRandom);
-	ObjectTypeDB::bind_method("PlayTrackByGroupRandom", &oamlGodotModule::PlayTrackByGroupRandom);
-	ObjectTypeDB::bind_method("PlayTrackByGroupAndSubgroupRandom", &oamlGodotModule::PlayTrackByGroupAndSubgroupRandom);
-	ObjectTypeDB::bind_method("Resume", &oamlGodotModule::Resume);
-	ObjectTypeDB::bind_method("SetMainLoopCondition", &oamlGodotModule::SetMainLoopCondition);
-	ObjectTypeDB::bind_method("SetCondition", &oamlGodotModule::SetCondition);
-	ObjectTypeDB::bind_method("SetLayerGain", &oamlGodotModule::SetLayerGain);
-	ObjectTypeDB::bind_method("SetLayerRandomChance", &oamlGodotModule::SetLayerRandomChance);
-	ObjectTypeDB::bind_method("SetTension", &oamlGodotModule::SetTension);
-	ObjectTypeDB::bind_method("SetVolume", &oamlGodotModule::SetVolume);
-	ObjectTypeDB::bind_method("StopPlaying", &oamlGodotModule::StopPlaying);
+	ClassDB::bind_method("AddTension", &oamlGodotModule::AddTension);
+	ClassDB::bind_method("EnableDynamicCompressor", &oamlGodotModule::EnableDynamicCompressor);
+	ClassDB::bind_method("GetPlayingInfo", &oamlGodotModule::GetPlayingInfo);
+	ClassDB::bind_method("GetVolume", &oamlGodotModule::GetVolume);
+	ClassDB::bind_method("Init", &oamlGodotModule::Init);
+	ClassDB::bind_method("InitString", &oamlGodotModule::InitString);
+	ClassDB::bind_method("IsPaused", &oamlGodotModule::IsPaused);
+	ClassDB::bind_method("IsPlaying", &oamlGodotModule::IsPlaying);
+	ClassDB::bind_method("IsTrackPlaying", &oamlGodotModule::IsTrackPlaying);
+	ClassDB::bind_method("LoadTrack", &oamlGodotModule::LoadTrack);
+	ClassDB::bind_method("LoadTrackProgress", &oamlGodotModule::LoadTrackProgress);
+	ClassDB::bind_method("Pause", &oamlGodotModule::Pause);
+	ClassDB::bind_method("PlayTrack", &oamlGodotModule::PlayTrack);
+	ClassDB::bind_method("PlayTrackWithStringRandom", &oamlGodotModule::PlayTrackWithStringRandom);
+	ClassDB::bind_method("PlayTrackByGroupRandom", &oamlGodotModule::PlayTrackByGroupRandom);
+	ClassDB::bind_method("PlayTrackByGroupAndSubgroupRandom", &oamlGodotModule::PlayTrackByGroupAndSubgroupRandom);
+	ClassDB::bind_method("Resume", &oamlGodotModule::Resume);
+	ClassDB::bind_method("SetMainLoopCondition", &oamlGodotModule::SetMainLoopCondition);
+	ClassDB::bind_method("SetCondition", &oamlGodotModule::SetCondition);
+	ClassDB::bind_method("SetLayerGain", &oamlGodotModule::SetLayerGain);
+	ClassDB::bind_method("SetLayerRandomChance", &oamlGodotModule::SetLayerRandomChance);
+	ClassDB::bind_method("SetTension", &oamlGodotModule::SetTension);
+	ClassDB::bind_method("SetVolume", &oamlGodotModule::SetVolume);
+	ClassDB::bind_method("StopPlaying", &oamlGodotModule::StopPlaying);
 }
 
 static void* oamlOpen(const char *filename) {
@@ -284,13 +291,13 @@ static int oamlSeek(void *fd, long offset, int whence) {
 	else if (whence == SEEK_END)
 		f->seek_end(offset);
 	else if (whence == SEEK_CUR)
-		f->seek(f->get_pos()+offset);
+		f->seek(f->get_position()+offset);
 	return 0;
 }
 
 static long oamlTell(void *fd) {
 	FileAccess *f = (FileAccess*)fd;
-	return f->get_pos();
+	return f->get_position();
 }
 
 static int oamlClose(void *fd) {
@@ -308,18 +315,18 @@ static oamlFileCallbacks fileCbs = {
 	&oamlClose
 };
 
-
 oamlGodotModule::oamlGodotModule() {
 	lock = Mutex::create();
 
 	oaml = new oamlApi();
 	oaml->SetFileCallbacks(&fileCbs);
-	oaml->SetAudioFormat(44100, 2, 4, false);
+	oaml->SetAudioFormat(44100, 2, 4, true);
 
-	stream = memnew(InternalStream);
-	stream->owner = this;
-	streamRid = AudioServer::get_singleton()->audio_stream_create(stream);
-	AudioServer::get_singleton()->stream_set_active(streamRid, true);
+	AudioServer::get_singleton()->lock();
+	mix_buffer.resize(AudioServer::get_singleton()->thread_get_mix_buffer_size());
+	AudioServer::get_singleton()->unlock();
+
+	AudioServer::get_singleton()->add_callback(_mix_audios, this);
 }
 
 oamlGodotModule::~oamlGodotModule() {
@@ -334,5 +341,6 @@ oamlGodotModule::~oamlGodotModule() {
 		lock = NULL;
 	}
 
-	AudioServer::get_singleton()->free(streamRid);
+	AudioServer::get_singleton()->remove_callback(_mix_audios, this);
 }
+

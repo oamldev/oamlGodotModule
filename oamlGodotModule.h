@@ -2,31 +2,28 @@
 #define __OAML_GODOT_MODULE_H__
 
 #include "servers/audio_server.h"
+#include "servers/audio/audio_stream.h"
 #include "oaml.h"
 #include "reference.h"
 
 
-
 class oamlGodotModule : public Reference {
-	OBJ_TYPE(oamlGodotModule, Reference);
+	GDCLASS(oamlGodotModule, Reference)
+
+	int sp_get_channel_count() const;
+	bool mix(AudioFrame *p_buffer, int p_frames);
+
+	void _mix_audio();
+	static void _mix_audios(void *self) { reinterpret_cast<oamlGodotModule *>(self)->_mix_audio(); }
 
 protected:
-	struct InternalStream : public AudioServer::AudioStream {
-		oamlGodotModule *owner;
-		virtual int get_channel_count() const;
-		virtual void set_mix_rate(int p_rate); //notify the stream of the mix rate
-		virtual bool mix(int32_t *p_buffer,int p_frames);
-		virtual void update();
-	};
 
-
+	Vector<AudioFrame> mix_buffer;
 	Mutex *lock;
-	InternalStream *stream;
 	RID streamRid;
 	oamlApi *oaml;
 
 	void set_mix_rate(int p_rate);
-	bool mix(int32_t *p_buffer, int p_frames);
 
 	static void _bind_methods();
 

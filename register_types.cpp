@@ -1,9 +1,9 @@
 #include "register_types.h"
-#include "object_type_db.h"
+
 #include "oamlGodotModule.h"
 
 void register_oamlGodotModule_types() {
-	ObjectTypeDB::register_type<oamlGodotModule>();
+	ClassDB::register_class<oamlGodotModule>();
 }
 
 void unregister_oamlGodotModule_types() {
