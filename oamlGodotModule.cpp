@@ -320,7 +320,7 @@ oamlGodotModule::oamlGodotModule() {
 
 	oaml = new oamlApi();
 	oaml->SetFileCallbacks(&fileCbs);
-	oaml->SetAudioFormat(44100, 2, 4, true);
+	oaml->SetAudioFormat(AudioServer::get_singleton()->get_mix_rate(), 2, 4, true);
 
 	AudioServer::get_singleton()->lock();
 	mix_buffer.resize(AudioServer::get_singleton()->thread_get_mix_buffer_size());
