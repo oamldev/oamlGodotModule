@@ -1,3 +1,4 @@
+#include "core/io/config_file.h"
 #include "os/file_access.h"
 
 #include "oamlGodotModule.h"
@@ -271,9 +272,26 @@ void oamlGodotModule::_bind_methods() {
 }
 
 static void* oamlOpen(const char *filename) {
-	FileAccess *f = FileAccess::open("res://"+String(filename), FileAccess::READ);
+	String path = "res://"+String(filename);
+	FileAccess *f = FileAccess::open(path, FileAccess::READ);
 	if (f == NULL) {
-		print_line("oaml: Error opening resource file: res://"+String(filename));
+		ConfigFile cf;
+		Error err = cf.load(path + ".import");
+		if (err == OK) {
+			f = FileAccess::open(cf.get_value("remap", "path"), FileAccess::READ);
+			if (f != NULL) {
+				char header[5] = "0000";
+				f->seek(28);
+				while (strncmp(header, "OggS", 4) != 0) {
+					f->get_buffer((uint8_t*)header, 4);
+					f->seek(f->get_position()-3);
+				}
+				f->seek(f->get_position()-1);
+				return (void*)f;
+			}
+		}
+
+		print_line("oaml: Error opening resource file:" + path);
 		return NULL;
 	}
 	return (void*)f;
@@ -343,4 +361,3 @@ oamlGodotModule::~oamlGodotModule() {
 
 	AudioServer::get_singleton()->remove_callback(_mix_audios, this);
 }
-
