@@ -244,6 +244,25 @@ void oamlGodotModule::StopPlaying() {
 	lock->unlock();
 }
 
+String oamlGodotModule::SaveState() {
+	if (oaml == NULL)
+		return "";
+
+	lock->lock();
+	String state = oaml->SaveState().c_str();
+	lock->unlock();
+	return state;
+}
+
+void oamlGodotModule::LoadState(String state) {
+	if (oaml == NULL)
+		return;
+
+	lock->lock();
+	oaml->LoadState(state.utf8().get_data());
+	lock->unlock();
+}
+
 void oamlGodotModule::_bind_methods() {
 	ClassDB::bind_method("AddTension", &oamlGodotModule::AddTension);
 	ClassDB::bind_method("EnableDynamicCompressor", &oamlGodotModule::EnableDynamicCompressor);
@@ -254,6 +273,7 @@ void oamlGodotModule::_bind_methods() {
 	ClassDB::bind_method("IsPaused", &oamlGodotModule::IsPaused);
 	ClassDB::bind_method("IsPlaying", &oamlGodotModule::IsPlaying);
 	ClassDB::bind_method("IsTrackPlaying", &oamlGodotModule::IsTrackPlaying);
+	ClassDB::bind_method("LoadState", &oamlGodotModule::LoadState);
 	ClassDB::bind_method("LoadTrack", &oamlGodotModule::LoadTrack);
 	ClassDB::bind_method("LoadTrackProgress", &oamlGodotModule::LoadTrackProgress);
 	ClassDB::bind_method("Pause", &oamlGodotModule::Pause);
@@ -262,6 +282,7 @@ void oamlGodotModule::_bind_methods() {
 	ClassDB::bind_method("PlayTrackByGroupRandom", &oamlGodotModule::PlayTrackByGroupRandom);
 	ClassDB::bind_method("PlayTrackByGroupAndSubgroupRandom", &oamlGodotModule::PlayTrackByGroupAndSubgroupRandom);
 	ClassDB::bind_method("Resume", &oamlGodotModule::Resume);
+	ClassDB::bind_method("SaveState", &oamlGodotModule::SaveState);
 	ClassDB::bind_method("SetMainLoopCondition", &oamlGodotModule::SetMainLoopCondition);
 	ClassDB::bind_method("SetCondition", &oamlGodotModule::SetCondition);
 	ClassDB::bind_method("SetLayerGain", &oamlGodotModule::SetLayerGain);

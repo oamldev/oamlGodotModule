@@ -55,6 +55,8 @@ public:
 	void SetTension(int value);
 	void SetVolume(float vol);
 	void StopPlaying();
+	String SaveState();
+	void LoadState(String state);
 };
 
 #endif
