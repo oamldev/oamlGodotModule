@@ -1,3 +1,4 @@
 config.pyc
 *.o
+*.obj
 *.d
