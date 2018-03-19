@@ -17,9 +17,7 @@ bool oamlGodotModule::mix(AudioFrame *p_buffer, int p_frames) {
 		return true;
 
 	zeromem(p_buffer, p_frames*sizeof(AudioFrame));
-	lock->lock();
 	oaml->MixToBuffer(p_buffer, p_frames*2);
-	lock->unlock();
 
 	return true;
 }
@@ -112,155 +110,119 @@ void oamlGodotModule::LoadTrack(String name) {
 	if (oaml == NULL)
 		return;
 
-	lock->lock();
 	oaml->LoadTrack(name.ascii());
-	lock->unlock();
 }
 
 float oamlGodotModule::LoadTrackProgress(String name) {
 	if (oaml == NULL)
 		return -1.f;
 
-	lock->lock();
-	float ret = oaml->LoadTrackProgress(name.ascii());
-	lock->unlock();
-	return ret;
+	return oaml->LoadTrackProgress(name.ascii());
 }
 
 void oamlGodotModule::Pause() {
 	if (oaml == NULL)
 		return;
 
-	lock->lock();
 	oaml->Pause();
-	lock->unlock();
 }
 
 void oamlGodotModule::PlayTrack(String name) {
 	if (oaml == NULL)
 		return;
 
-	lock->lock();
 	oaml->PlayTrack(name.ascii());
-	lock->unlock();
 }
 
 void oamlGodotModule::PlayTrackWithStringRandom(String str) {
 	if (oaml == NULL)
 		return;
 
-	lock->lock();
 	oaml->PlayTrackWithStringRandom(str.ascii());
-	lock->unlock();
 }
 
 void oamlGodotModule::PlayTrackByGroupRandom(String group) {
 	if (oaml == NULL)
 		return;
 
-	lock->lock();
 	oaml->PlayTrackByGroupRandom(group.ascii());
-	lock->unlock();
 }
 
 void oamlGodotModule::PlayTrackByGroupAndSubgroupRandom(String group, String subgroup) {
 	if (oaml == NULL)
 		return;
 
-	lock->lock();
 	oaml->PlayTrackByGroupAndSubgroupRandom(group.ascii(), subgroup.ascii());
-	lock->unlock();
 }
 
 void oamlGodotModule::Resume() {
 	if (oaml == NULL)
 		return;
 
-	lock->lock();
 	oaml->Resume();
-	lock->unlock();
 }
 
 void oamlGodotModule::SetMainLoopCondition(int value) {
 	if (oaml == NULL)
 		return;
 
-	lock->lock();
 	oaml->SetMainLoopCondition(value);
-	lock->unlock();
 }
 
 void oamlGodotModule::SetCondition(int id, int value) {
 	if (oaml == NULL)
 		return;
 
-	lock->lock();
 	oaml->SetCondition(id, value);
-	lock->unlock();
 }
 
 void oamlGodotModule::SetLayerGain(String layer, float gain) {
 	if (oaml == NULL)
 		return;
 
-	lock->lock();
 	oaml->SetLayerGain(layer.ascii(), gain);
-	lock->unlock();
 }
 
 void oamlGodotModule::SetLayerRandomChance(String layer, int randomChance) {
 	if (oaml == NULL)
 		return;
 
-	lock->lock();
 	oaml->SetLayerRandomChance(layer.ascii(), randomChance);
-	lock->unlock();
 }
 
 void oamlGodotModule::SetTension(int value) {
 	if (oaml == NULL)
 		return;
 
-	lock->lock();
 	oaml->SetTension(value);
-	lock->unlock();
 }
 
 void oamlGodotModule::SetVolume(float value) {
 	if (oaml == NULL)
 		return;
 
-	lock->lock();
 	oaml->SetVolume(value);
-	lock->unlock();
 }
 
 void oamlGodotModule::StopPlaying() {
 	if (oaml == NULL)
 		return;
 
-	lock->lock();
 	oaml->StopPlaying();
-	lock->unlock();
 }
 
 String oamlGodotModule::SaveState() {
 	if (oaml == NULL)
 		return "";
 
-	lock->lock();
-	String state = oaml->SaveState().c_str();
-	lock->unlock();
-	return state;
+	return oaml->SaveState().c_str();
 }
 
 void oamlGodotModule::LoadState(String state) {
 	if (oaml == NULL)
 		return;
 
-	lock->lock();
 	oaml->LoadState(state.utf8().get_data());
-	lock->unlock();
 }
 
 void oamlGodotModule::_bind_methods() {
@@ -355,8 +317,6 @@ static oamlFileCallbacks fileCbs = {
 };
 
 oamlGodotModule::oamlGodotModule() {
-	lock = Mutex::create();
-
 	oaml = new oamlApi();
 	oaml->SetFileCallbacks(&fileCbs);
 	oaml->SetAudioFormat(AudioServer::get_singleton()->get_mix_rate(), 2, 4, true);
@@ -373,11 +333,6 @@ oamlGodotModule::~oamlGodotModule() {
 		oaml->Shutdown();
 		delete oaml;
 		oaml = NULL;
-	}
-
-	if (lock != NULL) {
-		memdelete(lock);
-		lock = NULL;
 	}
 
 	AudioServer::get_singleton()->remove_callback(_mix_audios, this);
