@@ -64,6 +64,13 @@ String oamlGodotModule::GetPlayingInfo() {
 	return String(oaml->GetPlayingInfo());
 }
 
+String oamlGodotModule::GetVersion() {
+	if (oaml == NULL)
+		return "";
+
+	return oaml->GetVersion();
+}
+
 float oamlGodotModule::GetVolume() {
 	if (oaml == NULL)
 		return 1.0f;
@@ -229,6 +236,7 @@ void oamlGodotModule::_bind_methods() {
 	ClassDB::bind_method("AddTension", &oamlGodotModule::AddTension);
 	ClassDB::bind_method("EnableDynamicCompressor", &oamlGodotModule::EnableDynamicCompressor);
 	ClassDB::bind_method("GetPlayingInfo", &oamlGodotModule::GetPlayingInfo);
+	ClassDB::bind_method("GetVersion", &oamlGodotModule::GetVersion);
 	ClassDB::bind_method("GetVolume", &oamlGodotModule::GetVolume);
 	ClassDB::bind_method("Init", &oamlGodotModule::Init);
 	ClassDB::bind_method("InitString", &oamlGodotModule::InitString);

@@ -34,6 +34,7 @@ public:
 	void AddTension(int value);
 	void EnableDynamicCompressor(bool enable = true, double thresholdDb = -3.0, double ratio = 4.0);
 	String GetPlayingInfo();
+	String GetVersion();
 	float GetVolume();
 	void Init(String defsFilename);
 	void InitString(String defs);
