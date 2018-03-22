@@ -1,3 +1,4 @@
+import os
 Import('env')
 
 soxr_env = env.Clone()
@@ -17,7 +18,10 @@ soxr_env.add_source_files(env.modules_sources,"soxr-code/src/soxr.c")
 #soxr_env.add_source_files(env.modules_sources,"soxr-code/src/util32s.c")
 #soxr_env.add_source_files(env.modules_sources,"soxr-code/src/util64s.c")
 soxr_env.add_source_files(env.modules_sources,"soxr-code/src/vr32.c")
-soxr_env.Append(CPPFLAGS=['-DSOXR_LIB'])
+if os.getenv("VCINSTALLDIR"):
+  soxr_env.Append(CPPFLAGS=['/DSOXR_LIB'])
+else:
+  soxr_env.Append(CPPFLAGS=['-DSOXR_LIB'])
 soxr_env.Append(CPPPATH=['.', 'soxr-code/src'])
 
 oaml_env = env.Clone()
@@ -39,7 +43,11 @@ oaml_env.add_source_files(env.modules_sources,"oaml/src/oamlUtil.cpp")
 oaml_env.add_source_files(env.modules_sources,"oaml/src/ogg.cpp")
 oaml_env.add_source_files(env.modules_sources,"oaml/src/tinyxml2.cpp")
 oaml_env.add_source_files(env.modules_sources,"oaml/src/wav.cpp")
-oaml_env.Append(CPPFLAGS=['-std=c++11','-D__HAVE_OGG','-D__HAVE_SOXR','-Ithirdparty/libogg','-Ithirdparty/libvorbis'])
+
+if os.getenv("VCINSTALLDIR"):
+  oaml_env.Append(CPPFLAGS=['/std:c++latest','/D__HAVE_OGG','/D__HAVE_SOXR','/Ithirdparty/libogg','/Ithirdparty/libvorbis'])
+else:
+  oaml_env.Append(CPPFLAGS=['-std=c++11','-D__HAVE_OGG','-D__HAVE_SOXR','-Ithirdparty/libogg','-Ithirdparty/libvorbis'])
 oaml_env.Append(CPPPATH=['.', 'soxr-code/src','oaml/include'])
 
 module_env = env.Clone()
