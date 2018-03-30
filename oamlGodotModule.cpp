@@ -233,33 +233,33 @@ void oamlGodotModule::LoadState(String state) {
 }
 
 void oamlGodotModule::_bind_methods() {
-	ClassDB::bind_method("AddTension", &oamlGodotModule::AddTension);
-	ClassDB::bind_method("EnableDynamicCompressor", &oamlGodotModule::EnableDynamicCompressor);
-	ClassDB::bind_method("GetPlayingInfo", &oamlGodotModule::GetPlayingInfo);
-	ClassDB::bind_method("GetVersion", &oamlGodotModule::GetVersion);
-	ClassDB::bind_method("GetVolume", &oamlGodotModule::GetVolume);
-	ClassDB::bind_method("Init", &oamlGodotModule::Init);
-	ClassDB::bind_method("InitString", &oamlGodotModule::InitString);
-	ClassDB::bind_method("IsPaused", &oamlGodotModule::IsPaused);
-	ClassDB::bind_method("IsPlaying", &oamlGodotModule::IsPlaying);
-	ClassDB::bind_method("IsTrackPlaying", &oamlGodotModule::IsTrackPlaying);
-	ClassDB::bind_method("LoadState", &oamlGodotModule::LoadState);
-	ClassDB::bind_method("LoadTrack", &oamlGodotModule::LoadTrack);
-	ClassDB::bind_method("LoadTrackProgress", &oamlGodotModule::LoadTrackProgress);
-	ClassDB::bind_method("Pause", &oamlGodotModule::Pause);
-	ClassDB::bind_method("PlayTrack", &oamlGodotModule::PlayTrack);
-	ClassDB::bind_method("PlayTrackWithStringRandom", &oamlGodotModule::PlayTrackWithStringRandom);
-	ClassDB::bind_method("PlayTrackByGroupRandom", &oamlGodotModule::PlayTrackByGroupRandom);
-	ClassDB::bind_method("PlayTrackByGroupAndSubgroupRandom", &oamlGodotModule::PlayTrackByGroupAndSubgroupRandom);
-	ClassDB::bind_method("Resume", &oamlGodotModule::Resume);
-	ClassDB::bind_method("SaveState", &oamlGodotModule::SaveState);
-	ClassDB::bind_method("SetMainLoopCondition", &oamlGodotModule::SetMainLoopCondition);
-	ClassDB::bind_method("SetCondition", &oamlGodotModule::SetCondition);
-	ClassDB::bind_method("SetLayerGain", &oamlGodotModule::SetLayerGain);
-	ClassDB::bind_method("SetLayerRandomChance", &oamlGodotModule::SetLayerRandomChance);
-	ClassDB::bind_method("SetTension", &oamlGodotModule::SetTension);
-	ClassDB::bind_method("SetVolume", &oamlGodotModule::SetVolume);
-	ClassDB::bind_method("StopPlaying", &oamlGodotModule::StopPlaying);
+	ClassDB::bind_method(D_METHOD("add_tension", "value"), &oamlGodotModule::AddTension);
+	ClassDB::bind_method(D_METHOD("enable_dynamic_compressor", "enable", "thresholdDb", "ratio"), &oamlGodotModule::EnableDynamicCompressor, true, -3.0, 4.0);
+	ClassDB::bind_method(D_METHOD("get_playing_info"), &oamlGodotModule::GetPlayingInfo);
+	ClassDB::bind_method(D_METHOD("get_version"), &oamlGodotModule::GetVersion);
+	ClassDB::bind_method(D_METHOD("get_volume"), &oamlGodotModule::GetVolume);
+	ClassDB::bind_method(D_METHOD("init", "defsFilename"), &oamlGodotModule::Init);
+	ClassDB::bind_method(D_METHOD("init_string", "defs"), &oamlGodotModule::InitString);
+	ClassDB::bind_method(D_METHOD("is_paused"), &oamlGodotModule::IsPaused);
+	ClassDB::bind_method(D_METHOD("is_playing"), &oamlGodotModule::IsPlaying);
+	ClassDB::bind_method(D_METHOD("is_track_playing", "name"), &oamlGodotModule::IsTrackPlaying);
+	ClassDB::bind_method(D_METHOD("load_state", "state"), &oamlGodotModule::LoadState);
+	ClassDB::bind_method(D_METHOD("load_track", "name"), &oamlGodotModule::LoadTrack);
+	ClassDB::bind_method(D_METHOD("load_track_progress", "name"), &oamlGodotModule::LoadTrackProgress);
+	ClassDB::bind_method(D_METHOD("pause"), &oamlGodotModule::Pause);
+	ClassDB::bind_method(D_METHOD("play_track", "name"), &oamlGodotModule::PlayTrack);
+	ClassDB::bind_method(D_METHOD("play_track_with_string_random", "str"), &oamlGodotModule::PlayTrackWithStringRandom);
+	ClassDB::bind_method(D_METHOD("play_track_by_group_random", "group"), &oamlGodotModule::PlayTrackByGroupRandom);
+	ClassDB::bind_method(D_METHOD("play_track_by_group_and_subgroup_random", "group", "subgroup"), &oamlGodotModule::PlayTrackByGroupAndSubgroupRandom);
+	ClassDB::bind_method(D_METHOD("resume"), &oamlGodotModule::Resume);
+	ClassDB::bind_method(D_METHOD("save_state"), &oamlGodotModule::SaveState);
+	ClassDB::bind_method(D_METHOD("set_main_loop_condition", "value"), &oamlGodotModule::SetMainLoopCondition);
+	ClassDB::bind_method(D_METHOD("set_condition", "id", "value"), &oamlGodotModule::SetCondition);
+	ClassDB::bind_method(D_METHOD("set_layer_gain", "layer", "gain"), &oamlGodotModule::SetLayerGain);
+	ClassDB::bind_method(D_METHOD("set_layer_random_chance", "layer", "randomChance"), &oamlGodotModule::SetLayerRandomChance);
+	ClassDB::bind_method(D_METHOD("set_tension", "value"), &oamlGodotModule::SetTension);
+	ClassDB::bind_method(D_METHOD("set_volume", "vol"), &oamlGodotModule::SetVolume);
+	ClassDB::bind_method(D_METHOD("stop_playing"), &oamlGodotModule::StopPlaying);
 }
 
 static void* oamlOpen(const char *filename) {
