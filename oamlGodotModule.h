@@ -33,7 +33,10 @@ public:
 
 	void AddTension(int value);
 	void EnableDynamicCompressor(bool enable = true, double thresholdDb = -3.0, double ratio = 4.0);
+	float GetLayerGain(String layer);
+	int GetLayerRandomChance(String layer);
 	String GetPlayingInfo();
+	int GetTension();
 	String GetVersion();
 	float GetVolume();
 	void Init(String defsFilename);
