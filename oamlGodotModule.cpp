@@ -50,6 +50,13 @@ void oamlGodotModule::AddTension(int value) {
 	oaml->AddTension(value);
 }
 
+void oamlGodotModule::ClearConditions() {
+	if (oaml == NULL)
+		return;
+
+	oaml->ClearConditions();
+}
+
 void oamlGodotModule::EnableDynamicCompressor(bool enable, double thresholdDb, double ratio) {
 	if (oaml == NULL)
 		return;
@@ -255,6 +262,7 @@ void oamlGodotModule::LoadState(String state) {
 
 void oamlGodotModule::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("add_tension", "value"), &oamlGodotModule::AddTension);
+	ClassDB::bind_method(D_METHOD("clear_conditions"), &oamlGodotModule::ClearConditions);
 	ClassDB::bind_method(D_METHOD("enable_dynamic_compressor", "enable", "thresholdDb", "ratio"), &oamlGodotModule::EnableDynamicCompressor, true, -3.0, 4.0);
 	ClassDB::bind_method(D_METHOD("get_layer_gain", "layer"), &oamlGodotModule::GetLayerGain);
 	ClassDB::bind_method(D_METHOD("get_layer_random_chance", "layer"), &oamlGodotModule::GetLayerRandomChance);
