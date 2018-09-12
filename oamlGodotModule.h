@@ -4,7 +4,7 @@
 #include "servers/audio_server.h"
 #include "servers/audio/audio_stream.h"
 #include "oaml.h"
-#include "reference.h"
+#include "core/reference.h"
 
 
 class oamlGodotModule : public Reference {
