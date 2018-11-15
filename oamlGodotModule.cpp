@@ -31,10 +31,13 @@ void oamlGodotModule::_mix_audio() {
 	if (!mix(buffer, buffer_size))
 		return;
 
-	AudioFrame *target = AudioServer::get_singleton()->thread_get_channel_mix_buffer(0, 0);
+	int cc = AudioServer::get_singleton()->get_channel_count();
+	for (int i = 0; i < cc; i++) {
+		AudioFrame *target = AudioServer::get_singleton()->thread_get_channel_mix_buffer(0, i);
 
-	for (int j = 0; j < buffer_size; j++) {
-		target[j] += buffer[j];
+		for (int j = 0; j < buffer_size; j++) {
+			target[j] += buffer[j];
+		}
 	}
 }
 
