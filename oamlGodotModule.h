@@ -42,6 +42,7 @@ public:
 	float GetVolume();
 	void Init(String defsFilename);
 	void InitString(String defs);
+	void ReadDefsFile(String defsFilename);
 	bool IsPaused();
 	bool IsPlaying();
 	bool IsTrackPlaying(String name);

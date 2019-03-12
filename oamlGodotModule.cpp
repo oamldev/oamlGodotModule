@@ -123,6 +123,13 @@ void oamlGodotModule::InitString(String defs) {
 	oaml->InitString(defs.ascii());
 }
 
+void oamlGodotModule::ReadDefsFile(String defsFilename) {
+	if (oaml == NULL)
+		return;
+
+	oaml->ReadDefsFile(defsFilename.ascii().get_data());
+}
+
 bool oamlGodotModule::IsPaused() {
 	if (oaml == NULL)
 		return true;
@@ -275,6 +282,7 @@ void oamlGodotModule::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_volume"), &oamlGodotModule::GetVolume);
 	ClassDB::bind_method(D_METHOD("init", "defsFilename"), &oamlGodotModule::Init);
 	ClassDB::bind_method(D_METHOD("init_string", "defs"), &oamlGodotModule::InitString);
+	ClassDB::bind_method(D_METHOD("read_defs_file", "defsFilename"), &oamlGodotModule::ReadDefsFile);
 	ClassDB::bind_method(D_METHOD("is_paused"), &oamlGodotModule::IsPaused);
 	ClassDB::bind_method(D_METHOD("is_playing"), &oamlGodotModule::IsPlaying);
 	ClassDB::bind_method(D_METHOD("is_track_playing", "name"), &oamlGodotModule::IsTrackPlaying);
