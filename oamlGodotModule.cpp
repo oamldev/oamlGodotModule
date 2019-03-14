@@ -109,25 +109,25 @@ float oamlGodotModule::GetVolume() {
 	return oaml->GetVolume();
 }
 
-void oamlGodotModule::Init(String defsFilename) {
+int oamlGodotModule::Init(String defsFilename) {
 	if (oaml == NULL)
-		return;
+		return OAML_ERROR;
 
-	oaml->Init(defsFilename.ascii().get_data());
+	return oaml->Init(defsFilename.ascii().get_data());
 }
 
-void oamlGodotModule::InitString(String defs) {
+int oamlGodotModule::InitString(String defs) {
 	if (oaml == NULL)
-		return;
+		return OAML_ERROR;
 
-	oaml->InitString(defs.ascii());
+	return oaml->InitString(defs.ascii());
 }
 
-void oamlGodotModule::ReadDefsFile(String defsFilename) {
+int oamlGodotModule::ReadDefsFile(String defsFilename) {
 	if (oaml == NULL)
-		return;
+		return OAML_ERROR;
 
-	oaml->ReadDefsFile(defsFilename.ascii().get_data());
+	return oaml->ReadDefsFile(defsFilename.ascii().get_data());
 }
 
 bool oamlGodotModule::IsPaused() {
@@ -172,32 +172,32 @@ void oamlGodotModule::Pause() {
 	oaml->Pause();
 }
 
-void oamlGodotModule::PlayTrack(String name) {
+int oamlGodotModule::PlayTrack(String name) {
 	if (oaml == NULL)
-		return;
+		return OAML_ERROR;
 
-	oaml->PlayTrack(name.ascii());
+	return oaml->PlayTrack(name.ascii());
 }
 
-void oamlGodotModule::PlayTrackWithStringRandom(String str) {
+int oamlGodotModule::PlayTrackWithStringRandom(String str) {
 	if (oaml == NULL)
-		return;
+		return OAML_ERROR;
 
-	oaml->PlayTrackWithStringRandom(str.ascii());
+	return oaml->PlayTrackWithStringRandom(str.ascii());
 }
 
-void oamlGodotModule::PlayTrackByGroupRandom(String group) {
+int oamlGodotModule::PlayTrackByGroupRandom(String group) {
 	if (oaml == NULL)
-		return;
+		return OAML_ERROR;
 
-	oaml->PlayTrackByGroupRandom(group.ascii());
+	return oaml->PlayTrackByGroupRandom(group.ascii());
 }
 
-void oamlGodotModule::PlayTrackByGroupAndSubgroupRandom(String group, String subgroup) {
+int oamlGodotModule::PlayTrackByGroupAndSubgroupRandom(String group, String subgroup) {
 	if (oaml == NULL)
-		return;
+		return OAML_ERROR;
 
-	oaml->PlayTrackByGroupAndSubgroupRandom(group.ascii(), subgroup.ascii());
+	return oaml->PlayTrackByGroupAndSubgroupRandom(group.ascii(), subgroup.ascii());
 }
 
 void oamlGodotModule::Resume() {
@@ -303,6 +303,10 @@ void oamlGodotModule::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_tension", "value"), &oamlGodotModule::SetTension);
 	ClassDB::bind_method(D_METHOD("set_volume", "vol"), &oamlGodotModule::SetVolume);
 	ClassDB::bind_method(D_METHOD("stop_playing"), &oamlGodotModule::StopPlaying);
+
+	BIND_CONSTANT(OAML_OK);
+	BIND_CONSTANT(OAML_ERROR);
+	BIND_CONSTANT(OAML_NOT_FOUND);
 }
 
 static void* oamlOpen(const char *filename) {

@@ -31,6 +31,13 @@ public:
 	oamlGodotModule();
 	~oamlGodotModule();
 
+	// Return codes
+	enum {
+		OAML_OK			= 0,
+		OAML_ERROR		= -1,
+		OAML_NOT_FOUND		= -2
+	};
+
 	void AddTension(int value);
 	void ClearConditions();
 	void EnableDynamicCompressor(bool enable = true, double thresholdDb = -3.0, double ratio = 4.0);
@@ -40,9 +47,9 @@ public:
 	int GetTension();
 	String GetVersion();
 	float GetVolume();
-	void Init(String defsFilename);
-	void InitString(String defs);
-	void ReadDefsFile(String defsFilename);
+	int Init(String defsFilename);
+	int InitString(String defs);
+	int ReadDefsFile(String defsFilename);
 	bool IsPaused();
 	bool IsPlaying();
 	bool IsTrackPlaying(String name);
@@ -50,10 +57,10 @@ public:
 	void LoadTrack(String name);
 	float LoadTrackProgress(String name);
 	void Pause();
-	void PlayTrack(String name);
-	void PlayTrackWithStringRandom(String str);
-	void PlayTrackByGroupRandom(String group);
-	void PlayTrackByGroupAndSubgroupRandom(String group, String subgroup);
+	int PlayTrack(String name);
+	int PlayTrackWithStringRandom(String str);
+	int PlayTrackByGroupRandom(String group);
+	int PlayTrackByGroupAndSubgroupRandom(String group, String subgroup);
 	void Resume();
 	void SetMainLoopCondition(int value);
 	void SetCondition(int id, int value);
