@@ -4,11 +4,11 @@
 #include "servers/audio_server.h"
 #include "servers/audio/audio_stream.h"
 #include "oaml.h"
-#include "core/reference.h"
+#include "scene/main/node.h"
 
 
-class oamlGodotModule : public Reference {
-	GDCLASS(oamlGodotModule, Reference)
+class oamlGodotModule : public Node {
+	GDCLASS(oamlGodotModule, Node)
 
 	int sp_get_channel_count() const;
 	bool mix(AudioFrame *p_buffer, int p_frames);
